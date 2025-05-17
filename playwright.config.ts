@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+dotenv.config();
 
 /**
  * Read environment variables from file.
@@ -13,6 +15,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
+  //'./sauce-demo-tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -26,8 +29,8 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
+    baseURL: process.env.SAUCE_DEMO_URL || 'https://www.amazon.com/',
+    //baseURL: process.env.AMAZON_URL || 'https://www.amazon.com/',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -60,6 +63,17 @@ export default defineConfig({
     // },
 
     /* Test against branded browsers. */
+    {
+      name: 'brave',
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        launchOptions: {
+          executablePath: 'C:\\Users\\fjjan\\AppData\\Local\\BraveSoftware\\Brave-Browser\\Application\\brave.exe'
+        }
+      },
+    },
+
     // {
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
@@ -76,4 +90,5 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
+  
 });
